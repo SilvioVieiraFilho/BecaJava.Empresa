@@ -1,5 +1,6 @@
 package br.app.Empresa.controller;
 
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.app.Empresa.Config.MessagingConfig;
 import br.app.Empresa.request.DependenteRequest;
 import br.app.Empresa.response.BaseResponse;
 import br.app.Empresa.response.DependenteListResponse;
@@ -21,11 +23,16 @@ public class DependenteController extends BaseController {
 	@Autowired
 	private DependenteService service;
 
+
+
 	@PostMapping
 	public ResponseEntity inserir(@RequestBody DependenteRequest request) {
 		try {
 			BaseResponse response = service.inserir(request);
+			
 			return ResponseEntity.status(response.statusCode).body(response);
+		
+
 		} catch (Exception e) {
 			return ResponseEntity.status(errorBase.statusCode).body(errorBase);
 		}
